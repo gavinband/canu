@@ -135,6 +135,13 @@ foreach my $arg (@ARGV) {
     }
 }
 
+# GB: BEGIN
+# Add option to only consider specific set of kmers while overlapping
+setGlobalIfUndef( "corMhapSolidKmers", undef );
+setGlobalIfUndef( "ovlMhapSolidKmers", undef );
+setGlobalIfUndef( "utgMhapSolidKmers", undef );
+# GB: END
+
 #  By default, all three steps are run.  Options -correct, -trim and -assemble
 #  can limit the pipeline to just that stage.
 

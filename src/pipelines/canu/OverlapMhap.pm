@@ -268,6 +268,14 @@ sub mhapConfigure ($$$) {
 
     close(L);
 
+	# GB: BEGIN
+	# Get path to filter file if there is one
+	my $filterFile ;
+	if( defined(getGlobal("${tag}MhapSolidKmers"))) {
+		$filterFile = getGlobal("${tag}MhapSolidKmers") ;
+	}
+	# GB: END
+
     #  Create a script to generate precomputed blocks, including extracting the reads from seqStore.
 
     #OPTIMIZE
@@ -356,6 +364,11 @@ sub mhapConfigure ($$$) {
     print F "  --ordered-kmer-size $ordSketchMer \\\n";
     print F "  --threshold $threshold \\\n";
     print F "  --filter-threshold $filterThreshold \\\n";
+	# GB: BEGIN
+	# use a filter file to only consider specific kmers when seeding overlaps
+	print F "  --f $filterFile"		if(defined(getGlobal("${tag}MhapFilterFile")))
+	print F "  --supress-noise 2"	if(defined(getGlobal("${tag}MhapSolidKmers")))
+	# GB: END
     print F "  --min-olap-length ", getGlobal("minOverlapLength"), " \\\n";
     print F "  --num-threads ", getGlobal("${tag}mhapThreads"), " \\\n";
     print F " " . getGlobal("${tag}MhapOptions")         . " \\\n"   if (defined(getGlobal("${tag}MhapOptions")));
