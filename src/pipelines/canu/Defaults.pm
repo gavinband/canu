@@ -1089,6 +1089,13 @@ sub setDefaults () {
 
     setDefault("homoPolyCompress",             undef,        "Compute everything but consensus sequences using homopolymer compressed reads");
 
+	# GB: BEGIN
+	# add defaults for SolidKmers option
+	setDefault( "corMhapSolidKmers", undef, "List of kmers to user for seeding overlaps (when using mhap) in correction step" );
+	setDefault( "ovlMhapSolidKmers", undef, "List of kmers to user for seeding overlaps (when using mhap) in trimming step" );
+	setDefault( "utgMhapSolidKmers", undef, "List of kmers to user for seeding overlaps (when using mhap) in unitigging step" );
+	# GB: END
+
     #  Convert all the keys to lowercase, and remember the case-sensitive version
 
     foreach my $k (keys %synops) {
