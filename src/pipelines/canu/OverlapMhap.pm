@@ -364,15 +364,18 @@ sub mhapConfigure ($$$) {
     print F "  --ordered-kmer-size $ordSketchMer \\\n";
     print F "  --threshold $threshold \\\n";
     print F "  --filter-threshold $filterThreshold \\\n";
-	# GB: BEGIN
-	# use a filter file to only consider specific kmers when seeding overlaps
-	print F "  --f $filterFile"		if(defined(getGlobal("${tag}MhapFilterFile")))
-	print F "  --supress-noise 2"	if(defined(getGlobal("${tag}MhapSolidKmers")))
-	# GB: END
     print F "  --min-olap-length ", getGlobal("minOverlapLength"), " \\\n";
     print F "  --num-threads ", getGlobal("${tag}mhapThreads"), " \\\n";
     print F " " . getGlobal("${tag}MhapOptions")         . " \\\n"   if (defined(getGlobal("${tag}MhapOptions")));
-    print F "  -f $cygA ../../0-mercounts/$asm.ms$merSize.ignore.gz $cygB \\\n"   if (fileExists("$base/0-mercounts/$asm.ms$merSize.ignore.gz"));
+    # GB: BEGIN
+    # use a pre-constructed filter file to only consider specific kmers when seeding overlaps
+    if( defined($filterFile) ) { 
+	print F "  -f $filterFile \\\n"	if(defined($filterFile));
+	print F "  --supress-noise 2 \\\n"	if(defined(getGlobal("${tag}MhapSolidKmers")));
+    } else {
+	   print F "  -f $cygA ../../0-mercounts/$asm.ms$merSize.ignore.gz $cygB \\\n"   if (fileExists("$base/0-mercounts/$asm.ms$merSize.ignore.gz"));
+    }
+    # GB: END
     print F "  -p $cygA ./\$job.input.fasta $cygB \\\n";
     print F "  -q $cygA . $cygB \\\n";
     print F "&& \\\n";
